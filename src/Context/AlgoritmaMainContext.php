@@ -2,9 +2,9 @@
 
 namespace Algoritma\BehatExtension\Context;
 
-use App\Behat\Context\ControlGroup;
-use App\Behat\Context\EntityStatus;
-use App\Behat\Context\FileDownloader;
+use Algoritma\BehatExtension\Context\ControlGroup;
+use Algoritma\BehatExtension\Context\EntityStatus;
+use Algoritma\BehatExtension\Context\FileDownloader;
 use Algoritma\BehatExtension\Driver\AlgoritmaSelenium2Driver;
 use Algoritma\BehatExtension\Element\CollectionField;
 use Algoritma\BehatExtension\Element\Element;
@@ -65,6 +65,10 @@ class AlgoritmaMainContext extends MinkContext implements
      */
     public function beforeScenario()
     {
+        if (!$this->getSession()->getDriver() instanceof Selenium2Driver) {
+            return;
+        }
+
         $this->getSession()->resizeWindow(1920, 1080, 'current');
     }
 
@@ -747,7 +751,9 @@ class AlgoritmaMainContext extends MinkContext implements
         $driver = $this->getSession()->getDriver();
         $driver->reset();
 
-        $this->visit($this->getAppContainer()->get('router')->generate('algoritma_default'));
+        $this->openPage('Login Page');
+        
+//        $this->visit($this->getAppContainer()->get('router')->generate('algoritma_default'));
         $this->fillField('_username', $loginAndPassword);
         $this->fillField('_password', $loginAndPassword);
         $this->pressButton('_submit');

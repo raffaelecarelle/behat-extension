@@ -1,7 +1,7 @@
 services:
 
     algoritma_test.listener.js_logger_subscriber:
-        class: 'App\Behat\Listener\JsLogSubscriber'
+        class: 'Algoritma\BehatExtension\Listener\JsLogSubscriber'
         arguments:
             - '@mink'
             - '%kernel.log_dir%'
@@ -9,7 +9,7 @@ services:
             - { name: 'event_dispatcher.subscriber' }
 
     algoritma_element_factory:
-        class: 'App\Behat\Element\AlgoritmaElementFactory'
+        class: 'Algoritma\BehatExtension\Element\AlgoritmaElementFactory'
         arguments:
             - '@mink'
             - '@mink.selectors_handler'
@@ -18,13 +18,13 @@ services:
             - { name: 'suite_aware' }
 
     algoritma_page_factory:
-        class: 'App\Behat\Element\AlgoritmaPageFactory'
+        class: 'Algoritma\BehatExtension\Element\AlgoritmaPageFactory'
         arguments:
             - '@algoritma_element_factory'
             - []
 
     algoritma_behat_page_object_initializer:
-        class: 'App\Behat\Context\Initializer\AlgoritmaPageObjectInitializer'
+        class: 'Algoritma\BehatExtension\Context\Initializer\AlgoritmaPageObjectInitializer'
         arguments:
             - '@algoritma_element_factory'
             - '@algoritma_page_factory'
@@ -32,20 +32,20 @@ services:
             - { name: 'context.initializer' }
 
     algoritma_behat_session_alias_provider:
-        class: App\Behat\Context\SessionAliasProvider
+        class: Algoritma\BehatExtension\Context\SessionAliasProvider
 
     algoritma_behat_session_alias_initializer:
-        class: 'App\Behat\Context\Initializer\SessionAliasAwareInitializer'
+        class: 'Algoritma\BehatExtension\Context\Initializer\SessionAliasAwareInitializer'
         arguments:
             - '@algoritma_behat_session_alias_provider'
         tags:
             - { name: 'context.initializer' }
 
     algoritma_behat_browser_tab_manager:
-        class: App\Behat\Context\BrowserTabManager
+        class: Algoritma\BehatExtension\Context\BrowserTabManager
 
     algoritma_behat_browser_tab_manager_initializer:
-        class: 'App\Behat\Context\Initializer\BrowserTabManagerAwareInitializer'
+        class: 'Algoritma\BehatExtension\Context\Initializer\BrowserTabManagerAwareInitializer'
         arguments:
             - '@algoritma_behat_browser_tab_manager'
         tags:
@@ -54,11 +54,11 @@ services:
     Doctrine\Inflector\Inflector:
         factory: [ !service { class: Doctrine\Inflector\Rules\English\InflectorFactory }, 'build' ]
 
-    App\Behat\Context\Initializer\AppKernelInitializer:
+    Algoritma\BehatExtension\Context\Initializer\AppKernelInitializer:
         arguments:
             - '@fob_symfony.kernel'
         tags:
             - { name: 'context.initializer' }
 
     algoritma_test.storage.failed_features:
-        class: App\Behat\Storage\FailedFeatures
+        class: Algoritma\BehatExtension\Storage\FailedFeatures

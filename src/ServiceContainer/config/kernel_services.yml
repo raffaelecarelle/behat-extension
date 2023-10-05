@@ -3,7 +3,7 @@ services:
         public: true
 
     algoritma_test.kernel_service_factory:
-        class: App\Behat\ServiceContainer\KernelServiceFactory
+        class: Algoritma\BehatExtension\ServiceContainer\KernelServiceFactory
         arguments: ['@fob_symfony.kernel']
 
     property_accessor:

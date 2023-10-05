@@ -4,6 +4,7 @@ namespace Algoritma\BehatExtension\Listener;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Mink;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use WebDriver\Exception\UnknownCommand;
@@ -66,6 +67,10 @@ class JsLogSubscriber implements EventSubscriberInterface
      */
     public function log(AfterStepTested $event)
     {
+        if (!$this->mink->getSession()->getDriver() instanceof Selenium2Driver) {
+            return;
+        }
+
         try {
             $newLogs = $this->getLogs();
         } catch (UnknownCommand $e) {
