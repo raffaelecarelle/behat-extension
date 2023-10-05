@@ -1,0 +1,21 @@
+services:
+    _defaults:
+        public: true
+
+    algoritma_test.kernel_service_factory:
+        class: App\Behat\ServiceContainer\KernelServiceFactory
+        arguments: ['@fob_symfony.kernel']
+
+    property_accessor:
+        class: Symfony\Component\PropertyAccess\PropertyAccessorInterface
+        factory: [ 'Symfony\Component\PropertyAccess\PropertyAccess', createPropertyAccessor ]
+
+    doctrine.orm.entity_manager:
+        class: Doctrine\ORM\EntityManager
+        factory: ['@algoritma_test.kernel_service_factory', get]
+        arguments: ['doctrine.orm.entity_manager']
+
+    file_locator:
+        class: Symfony\Component\HttpKernel\Config\FileLocator
+        arguments:
+            - '@fob_symfony.kernel'

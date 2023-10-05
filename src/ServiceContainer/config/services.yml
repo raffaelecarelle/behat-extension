@@ -1,0 +1,64 @@
+services:
+
+    algoritma_test.listener.js_logger_subscriber:
+        class: 'App\Behat\Listener\JsLogSubscriber'
+        arguments:
+            - '@mink'
+            - '%kernel.log_dir%'
+        tags:
+            - { name: 'event_dispatcher.subscriber' }
+
+    algoritma_element_factory:
+        class: 'App\Behat\Element\AlgoritmaElementFactory'
+        arguments:
+            - '@mink'
+            - '@mink.selectors_handler'
+            - []
+        tags:
+            - { name: 'suite_aware' }
+
+    algoritma_page_factory:
+        class: 'App\Behat\Element\AlgoritmaPageFactory'
+        arguments:
+            - '@algoritma_element_factory'
+            - []
+
+    algoritma_behat_page_object_initializer:
+        class: 'App\Behat\Context\Initializer\AlgoritmaPageObjectInitializer'
+        arguments:
+            - '@algoritma_element_factory'
+            - '@algoritma_page_factory'
+        tags:
+            - { name: 'context.initializer' }
+
+    algoritma_behat_session_alias_provider:
+        class: App\Behat\Context\SessionAliasProvider
+
+    algoritma_behat_session_alias_initializer:
+        class: 'App\Behat\Context\Initializer\SessionAliasAwareInitializer'
+        arguments:
+            - '@algoritma_behat_session_alias_provider'
+        tags:
+            - { name: 'context.initializer' }
+
+    algoritma_behat_browser_tab_manager:
+        class: App\Behat\Context\BrowserTabManager
+
+    algoritma_behat_browser_tab_manager_initializer:
+        class: 'App\Behat\Context\Initializer\BrowserTabManagerAwareInitializer'
+        arguments:
+            - '@algoritma_behat_browser_tab_manager'
+        tags:
+            - { name: 'context.initializer' }
+
+    Doctrine\Inflector\Inflector:
+        factory: [ !service { class: Doctrine\Inflector\Rules\English\InflectorFactory }, 'build' ]
+
+    App\Behat\Context\Initializer\AppKernelInitializer:
+        arguments:
+            - '@fob_symfony.kernel'
+        tags:
+            - { name: 'context.initializer' }
+
+    algoritma_test.storage.failed_features:
+        class: App\Behat\Storage\FailedFeatures
